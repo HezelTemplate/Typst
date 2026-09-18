@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------
 // Copyright © 2025 Dimitri Julmy
-// License MIT
+// License GPL-2.0-or-later
 // -------------------------------------------------------------------
 // Author : Dimitri Julmy <dev@dimitri-julmy.com>
 // Date   : 27.11.2025

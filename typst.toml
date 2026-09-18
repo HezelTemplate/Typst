@@ -2,3 +2,4 @@
 name = "hezel-templates"
 version = "0.1.0"
 entrypoint = "lib.typ"
+license = "GPL-2.0-or-later"

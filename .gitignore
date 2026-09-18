@@ -16,3 +16,7 @@ Thumbs.db
 
 # Env
 **/.env
+
+# Personal logos referenced by .env (LOGO_PATHS)
+/logo_heia.svg
+/logo_hes-so.png

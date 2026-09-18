@@ -1,6 +1,6 @@
 // -------------------------------------------------------------------
 // Copyright © 2024 Dimitri Julmy
-// License MIT
+// License GPL-2.0-or-later
 // -------------------------------------------------------------------
 // Author : Dimitri Julmy <dim.julmy@gmail.com>
 // Date   : 18 May 2025
@@ -17,8 +17,10 @@
 // ---------- Logos
 
 // Up to 5 logos (school(s), partner company...), rendered left to right,
-// each getting an equal share of the row's width.
-#let logos = ("logo_heia.svg",)
+// each getting an equal share of the row's width. Filled in by
+// `script/new-project.sh` from `.env` (see `.env.example`), or add your
+// own file to assets/ and list its filename here.
+#let logos = ()
 
 // ---------- Report
 
@@ -42,21 +44,21 @@
 // ---------- Entity
 
 #let entity = (
-  name: [Haute école d'ingénierie et d'architecture Fribourg],
-  acronym: [HEIA],
-  sector: [Filière Informatique et Systèmes de Communication],
-  orientation: [Informatique logicielle],
-  locality: [Fribourg],
-  year: [3ème année],
+  name: [%%ENTITY_NAME%%],
+  acronym: [%%ENTITY_ACRONYM%%],
+  sector: [Filière],
+  orientation: [Orientation],
+  locality: [%%ENTITY_LOCALITY%%],
+  year: [Année],
 )
 
 // ---------- Author.s
 
 #let authors = (
   (
-    firstname: [],
-    lastname: [],
-    gender: [],
+    firstname: [%%AUTHOR_FIRSTNAME%%],
+    lastname: [%%AUTHOR_LASTNAME%%],
+    gender: [%%AUTHOR_GENDER%%],
     title: [],
   ),
 )
@@ -101,7 +103,7 @@
 #let versions = (
   (
     version: "0.0",
-    date: datetime(year: 2025, month: 05, day: 18),
+    date: datetime.today(),
     changes: [Création du document],
   ),
 )

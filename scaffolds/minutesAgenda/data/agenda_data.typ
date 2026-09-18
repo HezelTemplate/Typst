@@ -12,7 +12,7 @@
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * the Free Software Foundation, either version 2 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
@@ -31,8 +31,10 @@
 #let agenda = (
   lang: "en",
   // Up to 5 logos (school(s), partner company...), rendered left to right,
-  // each getting an equal share of the row's width.
-  logos: ("logo_hes-so.png",),
+  // each getting an equal share of the row's width. Filled in by
+  // `script/new-project.sh` from `.env` (see `.env.example`), or add your
+  // own files to asset/ and list their filenames here.
+  logos: (),
   project_scope: [Project scope],
   project_name: [Project name],
   seance_date: datetime(year: 2025, month: 12, day: 18),
@@ -48,9 +50,9 @@
 
 #let actors = (
   (
-    firstname: "Dimitri",
-    lastname: "Julmy",
-    gender: "m",
+    firstname: "%%AUTHOR_FIRSTNAME%%",
+    lastname: "%%AUTHOR_LASTNAME%%",
+    gender: "%%AUTHOR_GENDER%%",
     isChairman: true,
     isScribe: true,
     excused: false,

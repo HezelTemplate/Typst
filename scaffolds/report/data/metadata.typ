@@ -5,32 +5,34 @@
 #let metadata = (
   lang: lang.en,
   // Up to 5 logos (school(s), partner company...), rendered left to right,
-  // each getting an equal share of the row's width.
-  logos: ("logo_hes-so.png",),
+  // each getting an equal share of the row's width. Filled in by
+  // `script/new-project.sh` from `.env` (see `.env.example`), or add your
+  // own files to asset/logos/ and list their filenames here.
+  logos: (),
   type: "Report",
   scope: "Scope",
   name: "Project's name",
   git_url: "https://gitlab-url.com",
-  date_creation: datetime(year: 2025, month: 09, day: 19),
+  date_creation: datetime.today(),
   date_due: datetime.today(),
-  entity: "University of Applied Sciences and Arts of Western Switzerland",
-  entity_acronym: "HES-SO",
-  section: "Master of Science in Engineering",
-  section_acronym: "MSE",
-  profil: "Information and cyber security",
-  profil_acronym: "ICS",
-  locality: "Fribourg",
-  year: "3rd year",
+  entity: "%%ENTITY_NAME%%",
+  entity_acronym: "%%ENTITY_ACRONYM%%",
+  section: "%%SECTION_NAME%%",
+  section_acronym: "%%SECTION_ACRONYM%%",
+  profil: "%%PROFILE_NAME%%",
+  profil_acronym: "%%PROFILE_ACRONYM%%",
+  locality: "%%ENTITY_LOCALITY%%",
+  year: "Year",
 )
 
 // ---------- Persons
 
 #let authors = (
   (
-    firstname: "Dimitri",
-    lastname: "Julmy",
-    gender: gender.m,
-    locality: "Fribourg",
+    firstname: "%%AUTHOR_FIRSTNAME%%",
+    lastname: "%%AUTHOR_LASTNAME%%",
+    gender: "%%AUTHOR_GENDER%%",
+    locality: "%%AUTHOR_LOCALITY%%",
   ),
 )
 
@@ -53,7 +55,7 @@
 #let versions = (
   (
     version: "0.0",
-    date: datetime(year: 2024, month: 09, day: 17),
+    date: datetime.today(),
     changes: [Document creation],
   ),
 )
