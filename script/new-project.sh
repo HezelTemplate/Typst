@@ -38,10 +38,61 @@ find "$DEST" -name "*.pdf" -delete
 # point the scaffold's `@local/...` imports at that copy. The leading `/`
 # makes the path relative to the project root (the folder of main.typ), so
 # the same import string works from any subfolder (section/, table/...).
+#
+# Only what the scaffold actually uses is vendored: the names it imports
+# select the matching lines of lib.typ, then the files those lines point at
+# are copied along with everything they import or read in turn.
 VENDOR_DIR="lib/hezel-templates"
-mkdir -p "$DEST/$VENDOR_DIR"
-cp -r "$REPO_DIR/typst.toml" "$REPO_DIR/lib.typ" "$REPO_DIR/common" \
-  "$REPO_DIR/templates" "$DEST/$VENDOR_DIR/"
+
+# Names the scaffold imports from the package (single-line imports only).
+mapfile -t NEEDED < <(
+  grep -rhoE '"@local/hezel-templates:[0-9.]+": *[^/]*' "$DEST" --include="*.typ" |
+    sed -E 's/^[^:]*:[0-9.]+": *//; s/[()]//g' | tr ',' '\n' | tr -d ' ' |
+    grep -v '^$' | sort -u
+)
+
+# Trimmed lib.typ: each `#import "<file>": a, b` line keeps only the needed
+# names, and is dropped when none are; its local target becomes a root.
+lib_lines=()
+QUEUE=()
+while IFS= read -r line; do
+  [[ "$line" =~ ^#import\ \"([^\"]+)\":\ *(.*)$ ]] || continue
+  target="${BASH_REMATCH[1]}"
+  kept=()
+  IFS=',' read -ra names <<<"${BASH_REMATCH[2]}"
+  for n in "${names[@]}"; do
+    n="${n// /}"
+    printf '%s\n' "${NEEDED[@]}" | grep -qxF "$n" && kept+=("$n")
+  done
+  [ ${#kept[@]} -eq 0 ] && continue
+  lib_lines+=("#import \"$target\": $(
+    IFS=,
+    echo "${kept[*]}" | sed 's/,/, /g'
+  )")
+  [[ "$target" == @* ]] || QUEUE+=("$target")
+done <"$REPO_DIR/lib.typ"
+
+# Transitive closure over local imports and data files (paths relative to
+# the file that references them), copied with their repo layout preserved.
+declare -A SEEN=()
+while [ ${#QUEUE[@]} -gt 0 ]; do
+  rel="${QUEUE[0]}"
+  QUEUE=("${QUEUE[@]:1}")
+  [ -n "${SEEN[$rel]:-}" ] && continue
+  SEEN[$rel]=1
+  [ -f "$REPO_DIR/$rel" ] || continue
+  mkdir -p "$DEST/$VENDOR_DIR/$(dirname "$rel")"
+  cp "$REPO_DIR/$rel" "$DEST/$VENDOR_DIR/$rel"
+  [[ "$rel" == *.typ ]] || continue
+  while IFS= read -r dep; do
+    dep="$(realpath -m --relative-to="$REPO_DIR" "$REPO_DIR/$(dirname "$rel")/$dep")"
+    QUEUE+=("$dep")
+  done < <(grep -oE '(#import|toml\(|read\(|json\(|yaml\()[[:space:]]*"[^"@][^"]*"' \
+    "$REPO_DIR/$rel" | sed -E 's/^[^"]*"//; s/"$//')
+done
+
+printf '%s\n' "${lib_lines[@]}" >"$DEST/$VENDOR_DIR/lib.typ"
+cp "$REPO_DIR/typst.toml" "$DEST/$VENDOR_DIR/"
 find "$DEST" -name "*.typ" -not -path "$DEST/$VENDOR_DIR/*" -exec \
   sed -i "s|\"@local/hezel-templates:[0-9.]*\"|\"/$VENDOR_DIR/lib.typ\"|g" {} +
 
