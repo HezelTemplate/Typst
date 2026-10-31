@@ -27,6 +27,11 @@
    typst compile ~/path/to/my/new/document/main.typ
    ```
 
+Each new document is self-contained: `new-project.sh` copies the package
+source into `<dest>/lib/hezel-templates/` and rewrites the imports to point
+at it, so the document compiles on any machine without installing anything.
+Changes made to the package afterwards don't propagate to existing documents.
+
 Re-run `./script/install.sh` whenever you modify the package source.
 Run `./script/test.sh` to verify all templates still compile after a change.
 TODO bump-version.sh

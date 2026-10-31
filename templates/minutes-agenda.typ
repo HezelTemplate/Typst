@@ -3,7 +3,7 @@
 #import "@preview/linguify:0.5.0": linguify, set-database
 
 #let minutes-agenda(agenda: (:), actors: (), goals: (), logos: (), body) = {
-  set text(region: "ch", lang: agenda.lang, font: "Roboto")
+  set text(region: "ch", lang: agenda.lang, font: "Times New Roman")
   set page(margin: (top: 3cm, bottom: 3cm, x: 1.5cm))
   if logos.len() > 0 {
     set page(header: logo-row(logos))

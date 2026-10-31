@@ -10,7 +10,7 @@
   logos: (),
   body,
 ) = {
-  set text(region: "ch", lang: minute.lang, font: "Roboto")
+  set text(region: "ch", lang: minute.lang, font: "Times New Roman")
   set page(margin: (top: 3cm, bottom: 3cm, x: 1.5cm))
   if logos.len() > 0 {
     set page(header: logo-row(logos))

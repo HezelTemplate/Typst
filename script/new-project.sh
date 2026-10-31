@@ -33,6 +33,18 @@ cp -rL "$SRC" "$DEST"
 # Remove compiled output from the copy
 find "$DEST" -name "*.pdf" -delete
 
+# Vendor the package source into the project so it is self-contained (no
+# dependency on `script/install.sh` having been run on this machine), then
+# point the scaffold's `@local/...` imports at that copy. The leading `/`
+# makes the path relative to the project root (the folder of main.typ), so
+# the same import string works from any subfolder (section/, table/...).
+VENDOR_DIR="lib/hezel-templates"
+mkdir -p "$DEST/$VENDOR_DIR"
+cp -r "$REPO_DIR/typst.toml" "$REPO_DIR/lib.typ" "$REPO_DIR/common" \
+  "$REPO_DIR/templates" "$DEST/$VENDOR_DIR/"
+find "$DEST" -name "*.typ" -not -path "$DEST/$VENDOR_DIR/*" -exec \
+  sed -i "s|\"@local/hezel-templates:[0-9.]*\"|\"/$VENDOR_DIR/lib.typ\"|g" {} +
+
 # Data file (relative to $DEST) and logo asset dir per template — scaffolds
 # ship generic, with %%VAR%% placeholders for the personal bits. (Not the
 # shell-style ${VAR}: Typst's `[...]` content mode treats a leading `$` as
