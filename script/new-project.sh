@@ -116,6 +116,14 @@ apply_profile() {
   # `logos: ()` / `logos = ()` is bare Typst code (not a string), so it
   # can't carry a %%TOKEN%% placeholder of its own — instead, when there
   # are logos to add, target that literal empty tuple directly.
+  # Same for the document language: the scaffolds ship a valid default
+  # (`lang: "en"`) so they compile as-is, and DOC_LANG overrides it.
+  if [ -n "${DOC_LANG:-}" ]; then
+    case "$DOC_LANG" in
+    en | fr) sed_args+=(-e "s/^\([[:space:]]*\)lang: \"[a-z]*\",/\1lang: \"$DOC_LANG\",/") ;;
+    *) echo "Unsupported DOC_LANG '$DOC_LANG' (en | fr), keeping the scaffold's default." ;;
+    esac
+  fi
   if [ -n "$logos_tuple" ]; then
     local logos_escaped
     logos_escaped="$(sed_escape "$logos_tuple")"

@@ -6,6 +6,7 @@
 
 #show: specification.with(
   report: report,
+  lang: report.lang,
   project: project,
   entity: entity,
   authors: authors,

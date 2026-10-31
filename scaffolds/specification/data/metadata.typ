@@ -26,6 +26,7 @@
 
 #let report = (
   name: [Cahier des charges],
+  lang: "fr",
   date_creation: datetime(year: 2024, month: 09, day: 22),
   date_due: datetime.today(),
 )

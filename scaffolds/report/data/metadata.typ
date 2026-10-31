@@ -1,9 +1,9 @@
-#import "@local/hezel-templates:0.1.0": gender, lang
+#import "@local/hezel-templates:0.1.0": gender
 
 // ---------- Metadata
 
 #let metadata = (
-  lang: lang.en,
+  lang: "en",
   // Up to 5 logos (school(s), partner company...), rendered left to right,
   // each getting an equal share of the row's width. Filled in by
   // `script/new-project.sh` from `.env` (see `.env.example`), or add your
